@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉字通 — HSK5 So'z Sinovi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=Zilla+Slab:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #15161c;
+            --paper: #efe9da;
+            --seal: #a9302a;
+            --seal-dark: #7e211d;
+            --gold: #b8933f;
+            --jade: #3c6e5d;
+            --muted: #8b8579;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 15% 8%, rgba(184, 147, 63, 0.08), transparent 40%),
+                radial-gradient(circle at 85% 90%, rgba(169, 48, 42, 0.10), transparent 45%),
+                var(--ink);
+            color: var(--paper);
+            font-family: 'Source Serif 4', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px 14px 50px;
+        }
+
+        .stage {
+            width: 100%;
+            max-width: 760px;
+        }
+
+        /* HEADER / LOGO */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .topbar:hover .logo-seal {
+            transform: rotate(-6deg) scale(1.05);
+        }
+
+        .logo-seal {
+            width: 44px;
+            height: 44px;
+            border: 2.5px solid var(--seal);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--seal);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 20px;
+            flex-shrink: 0;
+            transform: rotate(-6deg);
+            transition: transform .2s ease;
+        }
+
+        .logo-text {
+            text-align: left;
+        }
+
+        .logo-title {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 19px;
+            color: var(--paper);
+            line-height: 1.1;
+        }
+
+        .logo-sub {
+            font-family: 'Zilla Slab', serif;
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .panel {
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.015) 0px, rgba(0, 0, 0, 0.015) 1px, transparent 1px, transparent 3px);
+            pointer-events: none;
+        }
+
+        /* SETUP SCREEN */
+        #setup {
+            padding: 28px 26px 26px;
+        }
+
+        .setup-title {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: 19px;
+            margin: 0 0 4px;
+        }
+
+        .setup-desc {
+            font-size: 13.5px;
+            color: #5a5546;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            font-family: 'Zilla Slab', serif;
+            font-size: 12px;
+            border: 1.3px solid rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.5);
+            color: #4a4638;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--gold);
+        }
+
+        .lesson-scroll {
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 18px;
+            padding-right: 4px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .unit-label {
+            font-family: 'Zilla Slab', serif;
+            font-size: 11px;
+            color: var(--jade);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin: 10px 2px 6px;
+        }
+
+        .unit-label:first-child {
+            margin-top: 0;
+        }
+
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .lesson-card {
+            border: 1.4px solid rgba(0, 0, 0, 0.14);
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 3px;
+            padding: 9px 11px;
+            cursor: pointer;
+            text-align: left;
+            transition: all .12s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .lesson-card:hover {
+            border-color: var(--gold);
+        }
+
+        .lesson-card.active {
+            border-color: var(--seal);
+            background: rgba(169, 48, 42, 0.08);
+        }
+
+        .lesson-card .num {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 15px;
+            color: var(--seal);
+            flex-shrink: 0;
+            width: 22px;
+            text-align: center;
+        }
+
+        .lesson-card .info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .lesson-card .cn-title {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 600;
+            font-size: 12.5px;
+            color: var(--ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-card .uz-title {
+            font-size: 10.5px;
+            color: #726c5c;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-card.active::after {
+            content: "✓";
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            color: var(--seal);
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .selection-summary {
+            font-family: 'Zilla Slab', serif;
+            font-size: 12.5px;
+            color: var(--jade);
+            margin-bottom: 14px;
+        }
+
+        .mode-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 150px;
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 3px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-family: 'Zilla Slab', serif;
+            font-size: 12.5px;
+            text-align: left;
+            color: var(--ink);
+        }
+
+        .mode-btn b {
+            display: block;
+            font-size: 13.5px;
+            margin-bottom: 2px;
+        }
+
+        .mode-btn.active {
+            border-color: var(--jade);
+            background: rgba(60, 110, 93, 0.10);
+        }
+
+        .start-btn {
+            width: 100%;
+            background: var(--seal);
+            color: var(--paper);
+            border: none;
+            padding: 15px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: 15.5px;
+            border-radius: 3px;
+            cursor: pointer;
+            letter-spacing: .02em;
+            transition: background .15s ease;
+        }
+
+        .start-btn:hover {
+            background: var(--seal-dark);
+        }
+
+        .start-btn:disabled {
+            background: #b8ab8f;
+            cursor: not-allowed;
+        }
+
+        /* QUIZ SCREEN */
+        #quiz {
+            display: none;
+            padding: 26px 26px 24px;
+        }
+
+        .quiz-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-family: 'Zilla Slab', serif;
+        }
+
+        .quiz-top .back-link {
+            font-size: 12px;
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: underline;
+            white-space: nowrap;
+        }
+
+        .progress-wrap {
+            flex: 1;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 3px;
+            margin: 0 14px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--jade), var(--gold));
+            width: 0%;
+            transition: width .3s ease;
+        }
+
+        .quiz-stat {
+            font-size: 12.5px;
+            color: #5a5546;
+            white-space: nowrap;
+        }
+
+        .quiz-stat b {
+            color: var(--seal);
+        }
+
+        .card-word {
+            text-align: center;
+            padding: 30px 10px 24px;
+            position: relative;
+        }
+
+        .hanzi {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: clamp(46px, 12vw, 72px);
+            color: var(--ink);
+            line-height: 1;
+        }
+
+        .pinyin {
+            font-family: 'Zilla Slab', serif;
+            font-size: 15px;
+            color: var(--muted);
+            margin-top: 10px;
+            min-height: 20px;
+            letter-spacing: .02em;
+        }
+
+        .pinyin.hidden {
+            visibility: hidden;
+        }
+
+        .lesson-tag {
+            font-family: 'Zilla Slab', serif;
+            font-size: 10.5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-top: 8px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+            margin-top: 4px;
+        }
+
+        @media (max-width:520px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .opt {
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 3px;
+            padding: 13px 15px;
+            font-family: 'Source Serif 4', serif;
+            font-size: 14px;
+            color: var(--ink);
+            text-align: left;
+            cursor: pointer;
+            transition: all .12s ease;
+        }
+
+        .opt:hover:not(.locked) {
+            border-color: var(--gold);
+            background: rgba(184, 147, 63, 0.08);
+        }
+
+        .opt.correct {
+            background: rgba(60, 110, 93, 0.18);
+            border-color: var(--jade);
+            color: var(--jade);
+            font-weight: 600;
+        }
+
+        .opt.wrong {
+            background: rgba(169, 48, 42, 0.14);
+            border-color: var(--seal);
+            color: var(--seal-dark);
+        }
+
+        .opt.locked {
+            cursor: default;
+        }
+
+        .type-row {
+            margin-top: 6px;
+        }
+
+        .type-input {
+            width: 100%;
+            padding: 13px 15px;
+            font-family: 'Source Serif 4', serif;
+            font-size: 15px;
+            border: 1.5px solid rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--ink);
+        }
+
+        .type-input:focus {
+            outline: none;
+            border-color: var(--jade);
+        }
+
+        .check-btn {
+            margin-top: 10px;
+            width: 100%;
+            background: var(--jade);
+            color: var(--paper);
+            border: none;
+            padding: 12px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            margin-top: 13px;
+            font-family: 'Zilla Slab', serif;
+            font-size: 13.5px;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .feedback.ok {
+            color: var(--jade);
+        }
+
+        .feedback.bad {
+            color: var(--seal);
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 16px;
+            width: 100%;
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            padding: 13px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: 14.5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .seal-stamp {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--seal);
+            border-radius: 6px;
+            color: var(--seal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 11px;
+            transform: rotate(-12deg) scale(0);
+            opacity: 0;
+            transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
+            pointer-events: none;
+        }
+
+        .seal-stamp.show {
+            transform: rotate(-12deg) scale(1);
+            opacity: .85;
+        }
+
+        /* RESULT SCREEN */
+        #result {
+            display: none;
+            padding: 34px 28px;
+            text-align: center;
+        }
+
+        .result-score {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 52px;
+            color: var(--seal);
+            margin: 6px 0 2px;
+        }
+
+        .result-label {
+            font-family: 'Zilla Slab', serif;
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .result-msg {
+            font-size: 14px;
+            color: #4a4638;
+            margin: 12px 0 20px;
+        }
+
+        .review-list {
+            text-align: left;
+            max-height: 260px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            padding-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+            font-size: 13.5px;
+        }
+
+        .review-item .rh {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            min-width: 70px;
+        }
+
+        .review-item .rc {
+            color: var(--jade);
+            text-align: right;
+        }
+
+        .result-btn-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .again-btn,
+        .home-btn {
+            flex: 1;
+            padding: 14px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .again-btn {
+            background: var(--seal);
+            color: var(--paper);
+        }
+
+        .home-btn {
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--ink);
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 16px;
+            font-family: 'Zilla Slab', serif;
+            font-size: 10.5px;
+            color: var(--muted);
+            letter-spacing: .05em;
+        }
+
+        .lesson-scroll::-webkit-scrollbar,
+        .review-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .lesson-scroll::-webkit-scrollbar-thumb,
+        .review-list::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stage">
+        <div class="topbar" id="logoBtn">
+            <div class="logo-seal">汉</div>
+            <div class="logo-text">
+                <div class="logo-title">汉字通 · Hanzi Tong</div>
+                <div class="logo-sub">HSK5 So'z Sinovi</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <!-- SETUP -->
+            <div id="setup">
+                <div class="setup-title">Qaysi mavzularni sinaymiz?</div>
+                <p class="setup-desc">HSK Standard Course 5 (上) darsligining barcha 18 mavzusi. Birini, bir nechtasini
+                    yoki hammasini tanlang.</p>
+
+                <div class="quick-actions">
+                    <button class="quick-btn" id="selectAllBtn">Barchasini tanlash (1–18)</button>
+                    <button class="quick-btn" id="selectNoneBtn">Tanlovni tozalash</button>
+                    <button class="quick-btn" id="selectFirst3Btn">Faqat 1–3 mavzu</button>
+                </div>
+
+                <div class="lesson-scroll" id="lessonScroll"></div>
+                <div class="selection-summary" id="selectionSummary"></div>
+
+                <div class="setup-title" style="margin-top:2px;">Sinov turi</div>
+                <div class="mode-row">
+                    <button class="mode-btn active" data-mode="choice">
+                        <b>4 variantli</b>To'g'ri tarjimani tanlang
+                    </button>
+                    <button class="mode-btn" data-mode="type">
+                        <b>Yozib javob berish</b>Tarjimani o'zingiz kiriting
+                    </button>
+                </div>
+
+                <button class="start-btn" id="startBtn">Sinovni boshlash</button>
+            </div>
+
+            <!-- QUIZ -->
+            <div id="quiz">
+                <div class="quiz-top">
+                    <span class="back-link" id="backLink">← Mavzularga qaytish</span>
+                    <div class="progress-wrap">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="quiz-stat">To'g'ri: <b id="qScore">0</b></div>
+                </div>
+                <div class="quiz-top" style="margin-top:-10px;">
+                    <div class="quiz-stat">Savol <b id="qIndex">1</b>/<span id="qTotal">0</span></div>
+                </div>
+
+                <div class="card-word">
+                    <div class="seal-stamp" id="sealStamp">正确</div>
+                    <div class="hanzi" id="hanziWord">词</div>
+                    <div class="pinyin hidden" id="pinyinWord">cí</div>
+                    <div class="lesson-tag" id="lessonTag"></div>
+                </div>
+
+                <div class="options" id="optionsBox"></div>
+
+                <div class="type-row" id="typeBox" style="display:none;">
+                    <input type="text" class="type-input" id="typeInput" placeholder="O'zbekcha tarjimani yozing..."
+                        autocomplete="off">
+                    <button class="check-btn" id="checkBtn">Tekshirish</button>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <button class="next-btn" id="nextBtn">Keyingi so'z →</button>
+            </div>
+
+            <!-- RESULT -->
+            <div id="result">
+                <div class="result-label">Yakuniy natija</div>
+                <div class="result-score" id="finalScore">0/0</div>
+                <div class="result-msg" id="finalMsg"></div>
+                <div class="review-list" id="reviewList"></div>
+                <div class="result-btn-row">
+                    <button class="home-btn" id="homeBtn">Mavzularga qaytish</button>
+                    <button class="again-btn" id="againBtn">Qayta boshlash</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>手指点一下 · 学一个词 — Har bir bosishda bitta so'z o'rganiladi</footer>
+    </div>
+
+    <script>
+        const LESSONS = [
+            {
+                id: 1, unit: "1-bo'lim · Hayotni anglash", cn: "爱的细节", uz: "Sevgining tafsilotlari", words: [
+                    ["细节", "xìjié", "tafsilot, detal"], ["电台", "diàntái", "radiostansiya"], ["恩爱", "ēn'ài", "(er-xotin) bir-birini yaxshi ko'radigan"],
+                    ["对比", "duìbǐ", "solishtirmoq, qiyoslamoq"], ["入围", "rùwéi", "saralanmoq, finalga chiqmoq"], ["评委", "píngwěi", "hakam (tanlov hakami)"],
+                    ["如何", "rúhé", "qanday, qanday qilib"], ["瘫痪", "tānhuàn", "falaj bo'lmoq"], ["离婚", "líhūn", "ajrashmoq"],
+                    ["自杀", "zìshā", "o'z joniga qasd qilmoq"], ["抱怨", "bàoyuàn", "shikoyat qilmoq, nolimoq"], ["爱护", "àihù", "asrab-avaylamoq, g'amxo'rlik qilmoq"],
+                    ["婚姻", "hūnyīn", "nikoh, oila qurish"], ["吵架", "chǎojià", "janjallashmoq"], ["相敬如宾", "xiāngjìngrúbīn", "bir-birini mehmondek hurmat qilish"],
+                    ["相亲相爱", "xiāngqīnxiāng'ài", "bir-birini sevish va yaqin bo'lish"], ["暗暗", "àn'àn", "sezdirmasdan, ichida"], ["轮", "lún", "navbat, navbat bilan"],
+                    ["不耐烦", "búnàifán", "toqatsizlanmoq"], ["靠", "kào", "suyanmoq, tiralmoq"], ["肩膀", "jiānbǎng", "yelka"],
+                    ["喊", "hǎn", "baqirmoq, chaqirmoq"], ["伸", "shēn", "cho'zmoq"], ["手指", "shǒuzhǐ", "barmoq (qo'l)"],
+                    ["歪歪扭扭", "wāiwāiniǔniǔ", "qiyshiq-qing'ir"], ["递", "dì", "uzatmoq, topshirmoq"], ["脑袋", "nǎodài", "bosh, kalla"],
+                    ["女士", "nǚshì", "xonim"], ["叙述", "xùshù", "hikoya qilmoq, bayon etmoq"], ["居然", "jūrán", "kutilmaganda, hatto"],
+                    ["催", "cuī", "shoshiltirmoq"], ["等待", "děngdài", "kutmoq"], ["蚊子", "wénzi", "chivin"],
+                    ["半夜", "bànyè", "yarim tun"], ["老婆", "lǎopo", "xotin (so'zlashuv)"], ["吵", "chǎo", "shovqinli, janjal qilmoq"],
+                    ["项", "xiàng", "dona (mukofot uchun sanoq so'z)"], ["患难与共", "huànnànyǔgòng", "qiyinchilikda birga bo'lish"], ["仍然", "réngrán", "hali ham, baribir"]
+                ]
+            },
+            {
+                id: 2, unit: "1-bo'lim · Hayotni anglash", cn: "留串钥匙给父母", uz: "Ota-onaga bir tutam kalit qoldirish", words: [
+                    ["串", "chuàn", "tutam, bog'lam (sanoq so'z)"], ["姥姥", "lǎolao", "buvi (ona tomondan)"], ["舅舅", "jiùjiu", "tog'a (ona tomondan)"],
+                    ["姑姑", "gūgu", "amma (ota tomondan)"], ["农村", "nóngcūn", "qishloq"], ["屋子", "wūzi", "uy, xona"],
+                    ["一辈子", "yíbèizi", "butun umr"], ["打工", "dǎgōng", "vaqtinchalik ishlamoq"], ["挣", "zhèng", "pul topmoq (ishlab)"],
+                    ["县", "xiàn", "tuman (ma'muriy birlik)"], ["套", "tào", "dona (kvartira/uy uchun sanoq so'z)"], ["装修", "zhuāngxiū", "ta'mirlamoq, bezamoq (uyni)"],
+                    ["不得了", "bùdéliǎo", "juda ham, o'ta darajada"], ["悄悄", "qiāoqiāo", "sekin, bildirmasdan"], ["醉", "zuì", "mast bo'lmoq"],
+                    ["锁", "suǒ", "qulf; qulflamoq"], ["晒", "shài", "quyoshda quritmoq"], ["冻", "dòng", "muzlamoq, qotib qolmoq"],
+                    ["亮", "liàng", "yorqin, yonmoq (yorug'lik)"], ["扑", "pū", "otilmoq, tashlanmoq"], ["临", "lín", "...dan oldin, yaqinlashganda"],
+                    ["强烈", "qiángliè", "kuchli, shiddatli"], ["长途", "chángtú", "uzoq masofali"], ["想象", "xiǎngxiàng", "tasavvur qilmoq"],
+                    ["微笑", "wēixiào", "tabassum, jilmaymoq"], ["温暖", "wēnnuǎn", "iliq, issiq (mehr haqida ham)"], ["立刻", "lìkè", "darhol, zudlik bilan"],
+                    ["阵", "zhèn", "lahza, bir zum (sanoq so'z)"], ["断", "duàn", "uzilmoq, to'xtamoq"], ["坚决", "jiānjué", "qat'iy"],
+                    ["被子", "bèizi", "ko'rpa"], ["灰尘", "huīchén", "chang"], ["卧室", "wòshì", "yotoqxona"],
+                    ["铺", "pū", "yozmoq, to'shamoq"], ["飘", "piāo", "havoda taralmoq (hid, ovoz)"], ["感受", "gǎnshòu", "his qilmoq"], ["流泪", "liúlèi", "ko'z yosh to'kmoq"]
+                ]
+            },
+            {
+                id: 3, unit: "1-bo'lim · Hayotni anglash", cn: "人生有选择，一切可改变", uz: "Hayotda tanlov bor, hammasi o'zgarishi mumkin", words: [
+                    ["人生", "rénshēng", "hayot (inson hayoti)"], ["一切", "yíqiè", "hammasi, barchasi"], ["包括", "bāokuò", "o'z ichiga olmoq"],
+                    ["各自", "gèzì", "har biri (o'zi)"], ["勿", "wù", "...mang (rasmiy taqiqlash)"], ["时刻", "shíkè", "lahza, payt"],
+                    ["铁路", "tiělù", "temir yo'l"], ["工人", "gōngrén", "ishchi"], ["稳定", "wěndìng", "barqaror"],
+                    ["待遇", "dàiyù", "maosh, ish sharoiti"], ["从不", "cóngbù", "hech qachon"], ["发愁", "fāchóu", "xavotirlanmoq"],
+                    ["平静", "píngjìng", "tinch, osoyishta"], ["迷上", "míshàng", "qattiq qiziqib qolmoq"], ["帆船", "fānchuán", "yelkanli kema"],
+                    ["撞", "zhuàng", "urilmoq, to'qnashmoq"], ["艘", "sōu", "dona (kema uchun sanoq so'z)"], ["航行", "hángxíng", "suzmoq (kema haqida)"],
+                    ["无边无际", "wúbiānwújì", "cheksiz, uchi-qirog'i yo'q"], ["积蓄", "jīxù", "jamg'arma"], ["于是", "yúshì", "shu sababli, shunday qilib"],
+                    ["二手", "èrshǒu", "ikkinchi qo'l (foydalanilgan)"], ["闪电", "shǎndiàn", "chaqmoq"], ["雷", "léi", "momaqaldiroq"],
+                    ["彩虹", "cǎihóng", "kamalak"], ["雾", "wù", "tuman"], ["多云", "duōyún", "bulutli"],
+                    ["阴", "yīn", "bulutli, quyoshsiz havo"], ["晴", "qíng", "ochiq, quyoshli havo"], ["雷阵雨", "léizhènyǔ", "momaqaldiroqli jala"],
+                    ["驾驶", "jiàshǐ", "(transport) haydamoq"], ["海洋", "hǎiyáng", "okean"], ["海面", "hǎimiàn", "dengiz yuzasi"],
+                    ["陆地", "lùdì", "quruqlik"], ["辞职", "cízhí", "ishdan bo'shamoq"], ["未来", "wèilái", "kelajak"], ["收入", "shōurù", "daromad"]
+                ]
+            },
+            {
+                id: 4, unit: "1-bo'lim · Hayotni anglash", cn: "子路背米", uz: "Zilu guruch orqalash", words: [
+                    ["至今", "zhìjīn", "hozirgacha"], ["孝敬", "xiàojìng", "ota-onaga hurmat-ehtirom ko'rsatmoq"], ["农民", "nóngmín", "dehqon"],
+                    ["战争", "zhànzhēng", "urush"], ["满足", "mǎnzú", "qanoatlanmoq, qondirmoq"], ["惭愧", "cánkuì", "uyalmoq, xijolat bo'lmoq"],
+                    ["决心", "juéxīn", "qat'iy qaror"], ["委屈", "wěiqu", "nohaq xafa bo'lmoq"], ["打听", "dǎtīng", "so'rab-surishtirmoq"],
+                    ["主人", "zhǔrén", "egasi, xo'jayin"], ["结实", "jiēshi", "mustahkam, baquvvat"], ["顶", "dǐng", "cho'qqi; -ning tepasi"],
+                    ["从前", "cóngqián", "ilgari, o'tmishda"], ["占", "zhàn", "egallamoq"], ["扶", "fú", "yordam bermoq (tutib turmoq)"], ["本领", "běnlǐng", "mahorat, qobiliyat"]
+                ]
+            },
+            {
+                id: 5, unit: "1-bo'lim · Hayotni anglash", cn: "济南的泉水", uz: "Jinan buloqlari", words: [
+                    ["传说", "chuánshuō", "rivoyat, afsona"], ["亿", "yì", "yuz million"], ["优美", "yōuměi", "nafis, chiroyli"],
+                    ["充满", "chōngmǎn", "to'la bo'lmoq"], ["分布", "fēnbù", "tarqalmoq, joylashmoq"], ["反映", "fǎnyìng", "aks ettirmoq"],
+                    ["善良", "shànliáng", "mehribon, saxovatli"], ["地势", "dìshì", "yer relyefi"], ["地区", "dìqū", "hudud"],
+                    ["埋", "mái", "ko'mmoq"], ["壶", "hú", "choynak, ko'za"], ["天然", "tiānrán", "tabiiy"],
+                    ["如今", "rújīn", "hozirgi kunda"], ["岩石", "yánshí", "tosh, qoya"], ["广大", "guǎngdà", "keng, ulkan"],
+                    ["形成", "xíngchéng", "shakllanmoq"], ["形状", "xíngzhuàng", "shakl, ko'rinish"], ["从而", "cóng'ér", "shu tariqa, natijada"],
+                    ["悠久", "yōujiǔ", "qadimiy, uzoq tarixga ega"], ["感激", "gǎnjī", "minnatdor bo'lmoq"], ["描写", "miáoxiě", "tasvirlamoq"],
+                    ["抢", "qiǎng", "talashmoq, tortib olmoq"], ["挡", "dǎng", "to'sib qo'ymoq"], ["救", "jiù", "qutqarmoq"],
+                    ["文字", "wénzì", "yozuv, harflar"], ["斜", "xié", "qiya, egri"], ["于", "yú", "-da, -ga (rasmiy)"],
+                    ["晕", "yūn", "hushidan ketmoq"], ["冲", "chōng", "urilmoq (suv haqida)"], ["治疗", "zhìliáo", "davolamoq"],
+                    ["火成岩", "huǒchéngyán", "vulqon jinsi"], ["为", "wéi", "sifatida"], ["独特", "dútè", "o'ziga xos, noyob"],
+                    ["玉", "yù", "yashma"], ["珍珠", "zhēnzhū", "marvarid"], ["产生", "chǎnshēng", "vujudga kelmoq"],
+                    ["石灰岩", "shíhuīyán", "ohaktosh"], ["碰", "pèng", "tegib ketmoq"], ["老百姓", "lǎobǎixìng", "oddiy xalq"],
+                    ["表面", "biǎomiàn", "sirt, yuza"], ["角度", "jiǎodù", "burchak, nuqtai nazar"], ["记载", "jìzǎi", "qayd etmoq, yozib qoldirmoq"],
+                    ["诗", "shī", "she'r"], ["赞美", "zànměi", "maqtamoq"], ["躲藏", "duǒcáng", "berkinmoq"], ["龙", "lóng", "ajdaho"]
+                ]
+            },
+            {
+                id: 6, unit: "3-bo'lim · Hikoyalarga quloq tutish", cn: "除夕的由来", uz: "Yangi yil kechasining kelib chiqishi", words: [
+                    ["除夕", "chúxī", "yangi yil arafasi"], ["由来", "yóulái", "kelib chiqishi"], ["农历", "nónglì", "oy taqvimi"],
+                    ["守岁", "shǒusuì", "yangi yil kechasi uxlamay kutib olish"], ["怪物", "guàiwu", "yirtqich, ajina"], ["伤害", "shānghài", "zarar yetkazmoq"],
+                    ["恨", "hèn", "nafratlanmoq"], ["骨头", "gǔtou", "suyak"], ["无奈", "wúnài", "ilojsiz qolmoq"],
+                    ["英雄", "yīngxióng", "qahramon"], ["英俊", "yīngjùn", "kelishgan (yigit haqida)"], ["咬", "yǎo", "tishlamoq"],
+                    ["外公", "wàigōng", "tashqi bobo (ona tomondan)"], ["询问", "xúnwèn", "so'ramoq, surishtirmoq"], ["天真", "tiānzhēn", "soddadil, beg'ubor"]
+                ]
+            },
+            {
+                id: 7, unit: "3-bo'lim · Hikoyalarga quloq tutish", cn: "成语故事两则", uz: "Ikki idioma hikoyasi", words: [
+                    ["瞎", "xiā", "ko'r; behuda, bemaqsad"], ["分别", "fēnbié", "alohida-alohida"], ["寻找", "xúnzhǎo", "qidirmoq"],
+                    ["牙齿", "yáchǐ", "tish"], ["胡说", "húshuō", "bema'ni gapirmoq"], ["尾巴", "wěiba", "dum"],
+                    ["绳子", "shéngzi", "arqon"], ["平", "píng", "tekis"], ["墙", "qiáng", "devor"],
+                    ["扇子", "shànzi", "shamollatgich"], ["片面", "piànmiàn", "bir tomonlama"], ["结论", "jiélùn", "xulosa"],
+                    ["将军", "jiāngjūn", "general, sarkarda"], ["善于", "shànyú", "-da mohir bo'lmoq"], ["称", "chēng", "deb atamoq"],
+                    ["打猎", "dǎliè", "ovga chiqmoq"], ["忽然", "hūrán", "to'satdan"], ["蹲", "dūn", "cho'nqaymoq"],
+                    ["摇", "yáo", "silkitmoq"], ["不要紧", "bùyàojǐn", "hechqisi yo'q"], ["支", "zhī", "dona (uzun narsalar uchun sanoq so'z)"],
+                    ["摆", "bǎi", "qo'ymoq, tartiblamoq"], ["姿势", "zīshì", "poza, holat"], ["全神贯注", "quánshénguànzhù", "butun diqqatini qaratmoq"],
+                    ["尽力", "jìnlì", "qo'lidan kelganini qilmoq"], ["反应", "fǎnyìng", "reaksiya"], ["成语", "chéngyǔ", "idioma"],
+                    ["盲人", "mángrén", "ko'r odam"], ["摸", "mō", "paypaslamoq"], ["大象", "dàxiàng", "fil"],
+                    ["智慧", "zhìhuì", "donolik"], ["士兵", "shìbīng", "askar"]
+                ]
+            },
+            {
+                id: 8, unit: "3-bo'lim · Hikoyalarga quloq tutish", cn: "“朝三暮四”的古今义", uz: "'Ertalab uch, kechqurun to'rt' — qadimgi va zamonaviy ma'nosi", words: [
+                    ["朝三暮四", "zhāosānmùsì", "beqaror, tez-tez fikrini o'zgartiradigan"], ["词汇", "cíhuì", "lug'at, so'z boyligi"], ["固定", "gùdìng", "qat'iy, o'zgarmas"],
+                    ["结构", "jiégòu", "tuzilma"], ["整体", "zhěngtǐ", "butun, yaxlit"], ["综合", "zōnghé", "kompleks, umumlashtirilgan"],
+                    ["完整", "wánzhěng", "to'liq, mukammal"], ["哲学家", "zhéxuéjiā", "faylasuf"], ["寓言", "yùyán", "masal"],
+                    ["喂养", "wèiyǎng", "boqmoq (hayvonni)"], ["群", "qún", "to'da, guruh"], ["猴子", "hóuzi", "maymun"],
+                    ["宠物", "chǒngwù", "uy hayvoni"], ["相处", "xiāngchǔ", "birga yashamoq, munosabatda bo'lmoq"], ["彼此", "bǐcǐ", "bir-biri"],
+                    ["倒", "dào", "aksincha"], ["要不", "yàobù", "bo'lmasa"]
+                ]
+            },
+            {
+                id: 9, unit: "3-bo'lim · Hikoyalarga quloq tutish", cn: "别样鲁迅", uz: "Siz bilmagan Lu Sin", words: [
+                    ["见解", "jiànjiě", "qarash, fikr"], ["地道", "dìdao", "haqiqiy, asl"], ["行家", "hángjia", "mutaxassis, ustoz"],
+                    ["讲究", "jiǎngjiu", "e'tibor bermoq (sifatga)"], ["交际", "jiāojì", "muloqot, aloqa"], ["大方", "dàfang", "saxiy, keng fe'lli"],
+                    ["好客", "hàokè", "mehmondo'st"], ["呼朋唤友", "hūpénghuànyǒu", "do'stlarni chaqirmoq"], ["高档", "gāodàng", "yuqori toifali"],
+                    ["豪华", "háohuá", "hashamatli"], ["胃口", "wèikǒu", "ishtaha"], ["胃病", "wèibìng", "oshqozon kasalligi"],
+                    ["戒", "jiè", "tark etmoq (odatni)"], ["算", "suàn", "hisoblanmoq"], ["作为", "zuòwéi", "sifatida"], ["曾经", "céngjīng", "avvallari, bir marta"]
+                ]
+            },
+            {
+                id: 10, unit: "3-bo'lim · Hikoyalarga quloq tutish", cn: "争论的奇迹", uz: "Bahsning mo''jizasi", words: [
+                    ["争论", "zhēnglùn", "bahslashmoq"], ["奇迹", "qíjì", "mo''jiza"], ["围绕", "wéirào", "atrofida bo'lmoq"],
+                    ["奔跑", "bēnpǎo", "yugurmoq"], ["蹄子", "tízi", "tuyoq"], ["辩论", "biànlùn", "munozara"],
+                    ["青蛙", "qīngwā", "qurbaqa"], ["始终", "shǐzhōng", "boshidan oxirigacha"], ["脖子", "bózi", "bo'yin"],
+                    ["说服", "shuōfú", "ishontirmoq"], ["摄影师", "shèyǐngshī", "fotograf"], ["毕竟", "bìjìng", "baribir, oxir-oqibat"],
+                    ["操场", "cāochǎng", "sport maydonchasi"], ["洞", "dòng", "teshik, in"], ["逐渐", "zhújiàn", "asta-sekin"],
+                    ["或许", "huòxǔ", "balki"], ["显得", "xiǎnde", "-dek ko'rinmoq"]
+                ]
+            },
+            {
+                id: 11, unit: "4-bo'lim · Fanga yaqinlashish", cn: "闹钟的危害", uz: "Budilnikning zarari", words: [
+                    ["闹钟", "nàozhōng", "budilnik"], ["危害", "wēihài", "zarar yetkazmoq"], ["人类", "rénlèi", "insoniyat"],
+                    ["机制", "jīzhì", "mexanizm"], ["生物钟", "shēngwùzhōng", "biologik soat"], ["规律", "guīlǜ", "qonuniyat"],
+                    ["光线", "guāngxiàn", "yorug'lik nuri"], ["必要", "bìyào", "zarur"], ["过渡", "guòdù", "o'tish (davri)"],
+                    ["浅", "qiǎn", "sayoz, yengil"], ["现代", "xiàndài", "zamonaviy"], ["享受", "xiǎngshòu", "rohatlanmoq"],
+                    ["用途", "yòngtú", "qo'llanilish sohasi"], ["实验", "shíyàn", "tajriba"], ["铃", "líng", "qo'ng'iroq"],
+                    ["状态", "zhuàngtài", "holat"], ["呼吸", "hūxī", "nafas olmoq"], ["低落", "dīluò", "tushkun (kayfiyat)"],
+                    ["计算", "jìsuàn", "hisoblamoq"], ["所", "suǒ", "(rasmiy struktura so'zi)"], ["相当", "xiāngdāng", "ancha, yetarlicha"],
+                    ["数", "shù", "son, raqam"], ["持续", "chíxù", "davom etmoq"]
+                ]
+            },
+            {
+                id: 12, unit: "4-bo'lim · Fanga yaqinlashish", cn: "海外用户玩儿微信", uz: "Xorijiy foydalanuvchilar WeChatdan foydalanmoqda", words: [
+                    ["用户", "yònghù", "foydalanuvchi"], ["颠球", "diānqiú", "to'p bilan jonglyorlik qilish"], ["明星", "míngxīng", "yulduz (mashhur shaxs)"],
+                    ["直播", "zhíbō", "jonli efir"], ["宝贝", "bǎobèi", "qadrdon, azizim"], ["逗", "dòu", "hazillashmoq, kuldirmoq"],
+                    ["宣传", "xuānchuán", "targ'ib qilmoq"], ["手笔", "shǒubǐ", "ish uslubi, mahorat"], ["推广", "tuīguǎng", "keng yoymoq"],
+                    ["注册", "zhùcè", "ro'yxatdan o'tmoq"], ["召开", "zhàokāi", "(yig'ilish) o'tkazmoq"], ["合作", "hézuò", "hamkorlik qilmoq"],
+                    ["伙伴", "huǒbàn", "hamkor"], ["总裁", "zǒngcái", "bosh direktor"], ["实现", "shíxiàn", "amalga oshirmoq"],
+                    ["覆盖", "fùgài", "qamrab olmoq"], ["移动", "yídòng", "harakatlanmoq, mobil"], ["通信", "tōngxìn", "aloqa"],
+                    ["应用", "yìngyòng", "qo'llash, ilova"], ["企业", "qǐyè", "korxona"], ["称霸", "chēngbà", "hukmronlik qilmoq"],
+                    ["背景", "bèijǐng", "fon, kelib chiqishi"], ["高级", "gāojí", "yuqori darajali"], ["副", "fù", "o'rinbosar"],
+                    ["开发", "kāifā", "ishlab chiqmoq"], ["中心", "zhōngxīn", "markaz"], ["相关", "xiāngguān", "bog'liq"],
+                    ["业务", "yèwù", "faoliyat, ish"], ["现实", "xiànshí", "haqiqat, real hayot"], ["个人", "gèrén", "shaxsiy"],
+                    ["以及", "yǐjí", "hamda"], ["程度", "chéngdù", "daraja"], ["发达", "fādá", "rivojlangan"]
+                ]
+            },
+            {
+                id: 13, unit: "5-bo'lim · Dunyoga ochiq ko'z bilan qarash", cn: "锯掉生活的“筐底”", uz: "Hayot savatining 'tubini' kesib tashlash", words: [
+                    ["锯子", "jùzi", "arra"], ["筐", "kuāng", "savat"], ["训练", "xùnliàn", "mashq qildirmoq"],
+                    ["缺乏", "quēfá", "yetishmaslik"], ["项目", "xiàngmù", "loyiha"], ["桃", "táo", "shaftoli"],
+                    ["装", "zhuāng", "solmoq, joylamoq"], ["启发", "qǐfā", "ilhomlantirmoq"], ["安装", "ānzhuāng", "o'rnatmoq"],
+                    ["栏杆", "lángān", "to'siq, panjara"], ["甲", "jiǎ", "birinchi (A)"], ["乙", "yǐ", "ikkinchi (B)"],
+                    ["工具", "gōngjù", "asbob"], ["投篮", "tóulán", "basketbolda to'p tashlamoq"], ["踩", "cǎi", "bosmoq (oyoq bilan)"],
+                    ["一再", "yízài", "qayta-qayta"], ["重复", "chóngfù", "takrorlamoq"], ["断断续续", "duànduànxùxù", "vaqti-vaqti bilan, uzuq-yuluq"],
+                    ["激烈", "jīliè", "shiddatli"], ["气氛", "qìfēn", "muhit, kayfiyat"], ["何况", "hékuàng", "qolaversa"],
+                    ["球迷", "qiúmí", "sport muxlisi"], ["工程师", "gōngchéngshī", "muhandis"], ["机器", "jīqì", "mashina"],
+                    ["顺畅", "shùnchàng", "to'siqsiz, ravon"], ["幼儿园", "yòu'éryuán", "bolalar bog'chasi"], ["好奇", "hàoqí", "qiziquvchan"],
+                    ["何必", "hébì", "nima uchun kerak"], ["多亏", "duōkuī", "shukurki, tufayli"], ["连忙", "liánmáng", "shosha-pisha"],
+                    ["瞧", "qiáo", "qaramoq"], ["困扰", "kùnrǎo", "bezovta qilmoq"], ["思维", "sīwéi", "tafakkur"]
+                ]
+            },
+            {
+                id: 14, unit: "5-bo'lim · Dunyoga ochiq ko'z bilan qarash", cn: "北京的四合院", uz: "Pekinning to'rt tomonlama hovlilari", words: [
+                    ["四合院", "sìhéyuàn", "to'rt tomonlama hovli"], ["民居", "mínjū", "fuqarolar turar-joyi"], ["组合", "zǔhé", "birlashtirmoq, kombinatsiya"],
+                    ["建筑", "jiànzhù", "bino, arxitektura"], ["形式", "xíngshì", "shakl"], ["所谓", "suǒwèi", "deb ataladigan"],
+                    ["方", "fāng", "kvadrat"], ["广泛", "guǎngfàn", "keng qamrovli"], ["样式", "yàngshì", "uslub"],
+                    ["代表", "dàibiǎo", "vakil qilmoq"], ["通常", "tōngcháng", "odatda"], ["并列", "bìngliè", "yonma-yon turmoq"],
+                    ["组成", "zǔchéng", "tashkil topmoq"], ["长辈", "zhǎngbèi", "katta avlod"], ["具备", "jùbèi", "ega bo'lmoq (shart-sharoitga)"],
+                    ["日常", "rìcháng", "kundalik"], ["起居", "qǐjū", "kundalik turmush"], ["接待", "jiēdài", "qabul qilmoq (mehmonni)"],
+                    ["功能", "gōngnéng", "funksiya"], ["空间", "kōngjiān", "fazo, joy"], ["竹子", "zhúzi", "bambuk"],
+                    ["则", "zé", "esa (rasmiy bog'lovchi)"], ["创造", "chuàngzào", "yaratmoq"], ["因而", "yīn'ér", "shuning uchun"]
+                ]
+            },
+            {
+                id: 15, unit: "5-bo'lim · Dunyoga ochiq ko'z bilan qarash", cn: "纸上谈兵", uz: "Qog'ozda strategiya (amaliyotsiz nazariyachi)", words: [
+                    ["纸上谈兵", "zhǐshàngtánbīng", "qog'ozda strategiya (amaliyotsiz nazariya)"], ["军事", "jūnshì", "harbiy ish"], ["敌人", "dírén", "dushman"],
+                    ["理论", "lǐlùn", "nazariya"], ["作战", "zuòzhàn", "jang qilmoq"], ["毛病", "máobìng", "nuqson, kamchilik"],
+                    ["道理", "dàolǐ", "mantiq, sabab"], ["迟早", "chízǎo", "ertami-kechmi"], ["军队", "jūnduì", "qo'shin"],
+                    ["派", "pài", "yubormoq"], ["弱", "ruò", "kuchsiz, zaif"], ["形势", "xíngshì", "vaziyat"],
+                    ["命令", "mìnglìng", "buyruq bermoq"], ["守", "shǒu", "himoya qilmoq, saqlamoq"], ["再三", "zàisān", "qayta-qayta"],
+                    ["胜利", "shènglì", "g'alaba"], ["成功", "chénggōng", "muvaffaqiyat"]
+                ]
+            },
+            {
+                id: 16, unit: "6-bo'lim · Tanni va ruhni tarbiyalash", cn: "体重与节食", uz: "Vazn va parhez", words: [
+                    ["苗条", "miáotiao", "ingichka, kelishgan qadd-qomat"], ["肥胖", "féipàng", "semiz, ortiqcha vazn"], ["营养", "yíngyǎng", "ozuqa moddalari"],
+                    ["减肥", "jiǎnféi", "ozg'inlashmoq"], ["节食", "jiéshí", "parhez qilmoq"], ["锻炼", "duànliàn", "mashq qilmoq"],
+                    ["控制", "kòngzhì", "nazorat qilmoq"], ["称", "chēng", "tarozida tortmoq"], ["测量", "cèliáng", "o'lchamoq"],
+                    ["摄入", "shèrù", "qabul qilmoq (ovqat/kaloriya)"], ["即", "jí", "ya'ni, deyarli"], ["个别", "gèbié", "alohida, ba'zi"],
+                    ["临时", "línshí", "vaqtinchalik"], ["暂时", "zànshí", "hozircha"]
+                ]
+            },
+            {
+                id: 17, unit: "6-bo'lim · Tanni va ruhni tarbiyalash", cn: "在最美好的时刻离开", uz: "Eng chiroyli lahzada ketish", words: [
+                    ["事物", "shìwù", "narsa-hodisa"], ["认知", "rènzhī", "anglash, idrok"], ["诺贝尔奖", "Nuòbèi'ěrjiǎng", "Nobel mukofoti"],
+                    ["高峰", "gāofēng", "cho'qqi, eng yuqori nuqta"], ["结尾", "jiéwěi", "yakun, oxiri"], ["终点", "zhōngdiǎn", "final nuqtasi"],
+                    ["迅速", "xùnsù", "tez, shiddatli"], ["深刻", "shēnkè", "chuqur (ta'sir)"], ["戏剧", "xìjù", "drama, spektakl"],
+                    ["演出", "yǎnchū", "chiqish, tomosha"], ["投入", "tóurù", "kiritmoq, jalb qilmoq"], ["服装", "fúzhuāng", "kiyim-bosh"],
+                    ["化妆", "huàzhuāng", "bo'yanmoq"], ["舞台", "wǔtái", "sahna"], ["平常", "píngcháng", "odatiy"],
+                    ["宁可", "nìngkě", "afzal ko'rmoq (garchi og'ir bo'lsa ham)"], ["忽视", "hūshì", "e'tiborsiz qoldirmoq"]
+                ]
+            },
+            {
+                id: 18, unit: "6-bo'lim · Tanni va ruhni tarbiyalash", cn: "抽象艺术美不美", uz: "Abstrakt san'at chiroylimi?", words: [
+                    ["抽象", "chōuxiàng", "mavhum, abstrakt"], ["古典", "gǔdiǎn", "klassik"], ["欣赏", "xīnshǎng", "zavqlanib tomosha qilmoq"],
+                    ["布", "bù", "mato"], ["规则", "guīzé", "qoida"], ["派", "pài", "oqim, maktab (uslub)"],
+                    ["作品", "zuòpǐn", "asar"], ["洒", "sǎ", "sepmoq"], ["极其", "jíqí", "g'oyat, o'ta"],
+                    ["神秘", "shénmì", "sirli"], ["丑陋", "chǒulòu", "xunuk"], ["自由", "zìyóu", "erkin, erkinlik"],
+                    ["设计", "shèjì", "dizayn qilmoq"], ["组", "zǔ", "guruh"], ["其余", "qíyú", "qolgani"],
+                    ["可见", "kějiàn", "ko'rinib turibdiki"], ["目前", "mùqián", "hozirgi vaqtda"]
+                ]
+            }
+        ];
+
+        let selectedLessons = new Set([1, 2, 3]);
+        let mode = "choice";
+        let quizWords = [];
+        let currentIndex = 0;
+        let score = 0;
+        let wrongAnswers = [];
+        let answered = false;
+
+        function renderLessonGrid() {
+            const scroll = document.getElementById('lessonScroll');
+            scroll.innerHTML = '';
+            let lastUnit = null;
+            let grid = null;
+            LESSONS.forEach(l => {
+                if (l.unit !== lastUnit) {
+                    const label = document.createElement('div');
+                    label.className = 'unit-label';
+                    label.textContent = l.unit;
+                    scroll.appendChild(label);
+                    grid = document.createElement('div');
+                    grid.className = 'lesson-grid';
+                    scroll.appendChild(grid);
+                    lastUnit = l.unit;
+                }
+                const card = document.createElement('div');
+                card.className = 'lesson-card' + (selectedLessons.has(l.id) ? ' active' : '');
+                card.dataset.id = l.id;
+                card.innerHTML = `<span class="num">${l.id}</span>
+      <div class="info">
+        <div class="cn-title">${l.cn}</div>
+        <div class="uz-title">${l.uz}</div>
+      </div>`;
+                card.addEventListener('click', () => {
+                    if (selectedLessons.has(l.id)) {
+                        if (selectedLessons.size > 1) { selectedLessons.delete(l.id); card.classList.remove('active'); }
+                    } else {
+                        selectedLessons.add(l.id); card.classList.add('active');
+                    }
+                    updateSummary();
+                });
+                grid.appendChild(card);
+            });
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalWords = LESSONS.filter(l => selectedLessons.has(l.id)).reduce((s, l) => s + l.words.length, 0);
+            document.getElementById('selectionSummary').textContent =
+                `${selectedLessons.size} ta mavzu tanlandi · jami ${totalWords} ta so'z`;
+        }
+
+        document.getElementById('selectAllBtn').addEventListener('click', () => {
+            selectedLessons = new Set(LESSONS.map(l => l.id));
+            renderLessonGrid();
+        });
+        document.getElementById('selectNoneBtn').addEventListener('click', () => {
+            selectedLessons = new Set([1]);
+            renderLessonGrid();
+        });
+        document.getElementById('selectFirst3Btn').addEventListener('click', () => {
+            selectedLessons = new Set([1, 2, 3]);
+            renderLessonGrid();
+        });
+
+        renderLessonGrid();
+
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                mode = btn.dataset.mode;
+            });
+        });
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function goHome() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('setup').style.display = 'block';
+        }
+        document.getElementById('logoBtn').addEventListener('click', goHome);
+        document.getElementById('backLink').addEventListener('click', goHome);
+        document.getElementById('homeBtn').addEventListener('click', goHome);
+
+        document.getElementById('startBtn').addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            let pool = [];
+            LESSONS.forEach(l => { if (selectedLessons.has(l.id)) l.words.forEach(w => pool.push({ w, lessonId: l.id, lessonCn: l.cn })); });
+            if (pool.length < 4) { return; }
+            quizWords = shuffle(pool.slice());
+            currentIndex = 0; score = 0; wrongAnswers = [];
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('qTotal').textContent = quizWords.length;
+            showQuestion();
+        }
+
+        function allTranslations() {
+            let all = [];
+            LESSONS.forEach(l => l.words.forEach(w => all.push(w[2])));
+            return all;
+        }
+
+        function showQuestion() {
+            answered = false;
+            const item = quizWords[currentIndex];
+            const word = item.w;
+            document.getElementById('hanziWord').textContent = word[0];
+            const pinyinEl = document.getElementById('pinyinWord');
+            pinyinEl.textContent = word[1];
+            pinyinEl.classList.add('hidden');
+            document.getElementById('lessonTag').textContent = `${item.lessonId}-mavzu · ${item.lessonCn}`;
+            document.getElementById('sealStamp').classList.remove('show');
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('qIndex').textContent = currentIndex + 1;
+            document.getElementById('qScore').textContent = score;
+            document.getElementById('progressBar').style.width = ((currentIndex) / quizWords.length * 100) + '%';
+
+            const optionsBox = document.getElementById('optionsBox');
+            const typeBox = document.getElementById('typeBox');
+            optionsBox.innerHTML = '';
+
+            if (mode === 'choice') {
+                typeBox.style.display = 'none';
+                optionsBox.style.display = 'grid';
+                let wrongs = allTranslations().filter(t => t !== word[2]);
+                wrongs = shuffle(wrongs).slice(0, 3);
+                let opts = shuffle([word[2], ...wrongs]);
+                opts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opt';
+                    btn.textContent = opt;
+                    btn.addEventListener('click', () => handleChoice(opt, word, btn));
+                    optionsBox.appendChild(btn);
+                });
+            } else {
+                optionsBox.style.display = 'none';
+                typeBox.style.display = 'block';
+                const input = document.getElementById('typeInput');
+                input.value = '';
+                input.disabled = false;
+                setTimeout(() => input.focus(), 50);
+            }
+        }
+
+        function reveal() {
+            document.getElementById('pinyinWord').classList.remove('hidden');
+        }
+
+        function handleChoice(opt, word, btnEl) {
+            if (answered) return;
+            answered = true;
+            reveal();
+            const buttons = document.querySelectorAll('.opt');
+            buttons.forEach(b => {
+                b.classList.add('locked');
+                if (b.textContent === word[2]) b.classList.add('correct');
+            });
+            const fb = document.getElementById('feedback');
+            if (opt === word[2]) {
+                score++;
+                btnEl.classList.add('correct');
+                fb.textContent = "To'g'ri! 👍";
+                fb.className = 'feedback ok';
+                document.getElementById('sealStamp').classList.add('show');
+            } else {
+                btnEl.classList.add('wrong');
+                fb.textContent = `Noto'g'ri. To'g'ri javob: ${word[2]}`;
+                fb.className = 'feedback bad';
+                wrongAnswers.push({ hanzi: word[0], pinyin: word[1], correct: word[2] });
+            }
+            document.getElementById('qScore').textContent = score;
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        document.getElementById('checkBtn').addEventListener('click', handleTypeCheck);
+        document.getElementById('typeInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleTypeCheck();
+        });
+
+        function normalize(s) {
+            return s.toLowerCase().replace(/['’ʻ`]/g, "'").replace(/[.,;!?()]/g, '').trim();
+        }
+
+        function handleTypeCheck() {
+            if (answered) return;
+            const item = quizWords[currentIndex];
+            const word = item.w;
+            const input = document.getElementById('typeInput');
+            const given = input.value.trim();
+            if (!given) return;
+            answered = true;
+            input.disabled = true;
+            reveal();
+            const fb = document.getElementById('feedback');
+
+            const userNorm = normalize(given);
+            const correctVariants = word[2].split(',').map(s => normalize(s));
+            const isCorrect = correctVariants.some(v => v.includes(userNorm) || userNorm.includes(v.split(' ')[0]));
+
+            if (isCorrect) {
+                score++;
+                fb.textContent = `To'g'ri! (${word[2]}) 👍`;
+                fb.className = 'feedback ok';
+                document.getElementById('sealStamp').classList.add('show');
+            } else {
+                fb.textContent = `To'g'ri javob: ${word[2]}`;
+                fb.className = 'feedback bad';
+                wrongAnswers.push({ hanzi: word[0], pinyin: word[1], correct: word[2] });
+            }
+            document.getElementById('qScore').textContent = score;
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentIndex++;
+            if (currentIndex >= quizWords.length) {
+                showResult();
+            } else {
+                showQuestion();
+            }
+        });
+
+        function showResult() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('progressBar').style.width = '100%';
+            const total = quizWords.length;
+            document.getElementById('finalScore').textContent = `${score}/${total}`;
+            const pct = Math.round(score / total * 100);
+            let msg = '';
+            if (pct === 100) msg = "Zo'r! Barcha so'zlarni bilasiz! 🎉";
+            else if (pct >= 80) msg = "Ajoyib natija! Yana bir oz mashq qiling.";
+            else if (pct >= 50) msg = "Yaxshi boshlanish, lekin ko'proq takrorlash kerak.";
+            else msg = "Bu mavzudagi so'zlarni yana bir bor ko'rib chiqing.";
+            document.getElementById('finalMsg').textContent = msg;
+
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '';
+            if (wrongAnswers.length === 0) {
+                reviewList.innerHTML = '<div style="text-align:center;color:#3c6e5d;font-family:\'Zilla Slab\',serif;padding:10px 0;">Xatolik yo\'q — barchasi to\'g\'ri!</div>';
+            } else {
+                wrongAnswers.forEach(w => {
+                    const item = document.createElement('div');
+                    item.className = 'review-item';
+                    item.innerHTML = `<div class="rh">${w.hanzi}<br><span style="font-size:11px;color:#8b8579;font-weight:400;">${w.pinyin}</span></div>
+        <div class="rc">${w.correct}</div>`;
+                    reviewList.appendChild(item);
+                });
+            }
+        }   
+
+        document.getElementById('againBtn').addEventListener('click', () => {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('setup').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
